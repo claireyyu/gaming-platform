@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <mvc:annotation-driven />
+    <mvc:default-servlet-handler />
+    <mvc:interceptors>
+        <!--根据token获取用户信息-->
+        <bean class="cn.cie.interceptor.AuthInterceptor" />
+        <!--用户登录拦截-->
+        <mvc:interceptor>
+            <mvc:mapping path="/user/*" />
+            <mvc:mapping path="/order/*"/>
+            <mvc:exclude-mapping path="/user/findpassword" />
+            <mvc:exclude-mapping path="/user/sendfetchpwdmail" />
+            <bean class="cn.cie.interceptor.LoginInterceptor" />
+        </mvc:interceptor>
+        <!--管理员登陆拦截-->
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/*"/>
+            <mvc:exclude-mapping path="/admin/login"/>
+            <bean class="cn.cie.interceptor.AdminInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <mvc:resources mapping="/img/**" location="WEB-INF/image/" />
+    <mvc:resources mapping="/css/**" location="WEB-INF/css/" />
+    <mvc:resources mapping="/js/**" location="WEB-INF/js/" />
+    <context:component-scan base-package="cn.cie.controller, cn.cie.aop" />
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    <!--文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="maxUploadSizePerFile" value="1024000" />
+    </bean>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+</beans>

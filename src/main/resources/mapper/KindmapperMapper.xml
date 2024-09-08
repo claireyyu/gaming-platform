@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cie.mapper.KindmapperMapper">
+  <resultMap id="BaseResultMap" type="cn.cie.entity.Kindmapper">
+    <result column="game" jdbcType="INTEGER" property="game" />
+    <result column="kind" jdbcType="INTEGER" property="kind" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.cie.entity.Kindmapper">
+    insert into kindmapper (game, kind)
+    values (#{game,jdbcType=INTEGER}, #{kind,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertKindBatch" parameterType="list">
+    insert into kindmapper (game, kind)
+    values
+    <foreach collection="kinds" item="kind" separator=",">
+      (#{game,jdbcType=INTEGER}, #{kind,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+  <insert id="insertGameBatch" parameterType="list">
+    insert into kindmapper (kind, game)
+    values
+    <foreach collection="games" item="game" separator=",">
+      (#{kind,jdbcType=INTEGER}, #{game,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+
+  <select id="selectByKind" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select game from kindmapper where kind = #{kind,jdbcType=INTEGER}
+  </select>
+  <select id="selectByGame" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select kind from kindmapper where game = #{game,jdbcType=INTEGER}
+  </select>
+  <select id="selectBatchByKinds" parameterType="list" resultType="java.lang.Integer">
+    select game from kindmapper
+    <where>
+      kind in
+      <foreach collection="kinds" item="kind" separator="," open="(" close=")">
+        #{kind}
+      </foreach>
+    </where>
+  </select>
+
+  <delete id="deleteByGame" parameterType="java.lang.Integer">
+    delete from kindmapper where game = #{game,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByKind" parameterType="java.lang.Integer">
+    delete from kindmapper where kind = #{kind,jdbcType=INTEGER}
+  </delete>
+</mapper>

@@ -1,0 +1,7 @@
+cn/cie/mapper/GameMapperTest.class
+cn/cie/mapper/UserMapperTest.class
+cn/cie/utils/RedisUtilTest.class
+cn/cie/services/KindServiceTest.class
+cn/cie/common/CommonTest.class
+cn/cie/services/UserServiceTest.class
+cn/cie/mapper/KindmapperMapperTest.class

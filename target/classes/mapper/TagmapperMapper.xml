@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cie.mapper.TagmapperMapper">
+  <resultMap id="BaseResultMap" type="cn.cie.entity.Tagmapper">
+    <result column="game" jdbcType="INTEGER" property="game" />
+    <result column="tag" jdbcType="INTEGER" property="tag" />
+  </resultMap>
+
+  <insert id="insert" parameterType="cn.cie.entity.Tagmapper">
+    insert into tagmapper (game, tag)
+    values (#{game,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER})
+  </insert>
+
+  <select id="selectByTag" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select game from tagmapper where tag = #{tag,jdbcType=INTEGER}
+  </select>
+  <select id="selectByGame" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select tag from tagmapper where game = #{game,jdbcType=INTEGER}
+  </select>
+  <select id="selectBatchByTags" parameterType="list" resultType="java.lang.Integer">
+    select game from tagmapper
+    <where>
+      tag in
+      <foreach collection="tags" item="tag" separator="," open="(" close=")">
+        #{tag}
+      </foreach>
+    </where>
+  </select>
+
+</mapper>
